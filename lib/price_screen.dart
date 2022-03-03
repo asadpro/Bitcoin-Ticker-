@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'coin_data.dart';
 
 class PriceScreen extends StatefulWidget {
   const PriceScreen({Key? key}) : super(key: key);
@@ -8,7 +9,21 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  Object? dropDownValue;
+  Object? dropDownValue = 'USD';
+  List<DropdownMenuItem<String>> getCurrencies() {
+    List<DropdownMenuItem<String>> items = [];
+    for (String item in currenciesList) {
+      items.add(
+        DropdownMenuItem(
+          child: Text(item),
+          value: item,
+        ),
+      );
+    }
+
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,38 +57,21 @@ class _PriceScreenState extends State<PriceScreen> {
             ),
           ),
           Container(
-            height: 150.0,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.lightBlue,
-            ),
-            padding: EdgeInsets.only(bottom: 30.0),
-            child: DropdownButton(
-              iconSize: 34,
-              value: dropDownValue,
-              dropdownColor: Colors.deepPurple[300],
-              icon: Icon(Icons.arrow_drop_down_circle_rounded),
-              items: const [
-                DropdownMenuItem(
-                  child: Text('USD'),
-                  value: Text('USD'),
-                ),
-                DropdownMenuItem(
-                  child: Text('GBP'),
-                  value: Text('GBP'),
-                ),
-                DropdownMenuItem(
-                  child: Text('PKR'),
-                  value: Text('PKR'),
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  dropDownValue = value;
-                });
-              },
-            ),
-          ),
+              height: 150.0,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.lightBlue,
+              ),
+              padding: EdgeInsets.only(bottom: 30.0),
+              child: DropdownButton(
+                value: dropDownValue,
+                items: getCurrencies(),
+                onChanged: (value) {
+                  setState(() {
+                    dropDownValue = value;
+                  });
+                },
+              )),
         ],
       ),
     );
