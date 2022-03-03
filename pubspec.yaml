@@ -28,5 +28,11 @@ flutter:
   uses-material-design: true
 
 
+  fonts:
+    - family: Raleway
+      fonts:
+        - asset: fonts/LuckiestGuy-Regular.ttf
+
+
 
 

@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'coin_data.dart';
+import 'dart:io' show Platform;
 
 class PriceScreen extends StatefulWidget {
   const PriceScreen({Key? key}) : super(key: key);
@@ -9,19 +11,38 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  Object? dropDownValue = 'USD';
-  List<DropdownMenuItem<String>> getCurrencies() {
-    List<DropdownMenuItem<String>> items = [];
-    for (String item in currenciesList) {
-      items.add(
-        DropdownMenuItem(
-          child: Text(item),
-          value: item,
-        ),
-      );
-    }
+  String? selectedCurrency = 'USD';
 
-    return items;
+  CupertinoPicker iosPicker() {
+    List<Text> pickerItems = [];
+    for (String currency in currenciesList) {
+      pickerItems.add(Text(currency));
+    }
+    return CupertinoPicker(
+      itemExtent: 32,
+      onSelectedItemChanged: (selectedIndex) {},
+      children: pickerItems,
+    );
+  }
+
+  DropdownButton<String> androidDropdown() {
+    List<DropdownMenuItem<String>> dropDownItems = [];
+    for (String currency in currenciesList) {
+      var newItem = DropdownMenuItem(
+        child: Text(currency),
+        value: currency,
+      );
+      dropDownItems.add(newItem);
+    }
+    return DropdownButton(
+      value: selectedCurrency,
+      items: dropDownItems,
+      onChanged: (value) {
+        setState(() {
+          selectedCurrency = value;
+        });
+      },
+    );
   }
 
   @override
@@ -57,21 +78,14 @@ class _PriceScreenState extends State<PriceScreen> {
             ),
           ),
           Container(
-              height: 150.0,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.lightBlue,
-              ),
-              padding: EdgeInsets.only(bottom: 30.0),
-              child: DropdownButton(
-                value: dropDownValue,
-                items: getCurrencies(),
-                onChanged: (value) {
-                  setState(() {
-                    dropDownValue = value;
-                  });
-                },
-              )),
+            height: 150.0,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.lightBlue,
+            ),
+            padding: EdgeInsets.only(bottom: 35.0),
+            child: Platform.isIOS ? iosPicker() : androidDropdown(),
+          ),
         ],
       ),
     );
